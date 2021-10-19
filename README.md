@@ -1,6 +1,7 @@
 # Team Name
 
 ### Team Members
+Thomas Herrmann
 
 ### Final Proposal
 1. Persona/Scenario
