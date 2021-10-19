@@ -2,6 +2,7 @@
 
 ### Team Members
 Thomas Herrmann
+Kyla Christopher-Moody
 
 ### Final Proposal
 1. Persona/Scenario
