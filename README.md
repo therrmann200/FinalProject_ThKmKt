@@ -1,8 +1,9 @@
 # Team Name
 
 ### Team Members
-Thomas Herrmann
-Kyla Christopher-Moody
+1. Thomas Herrmann
+2. Kyla Christopher-Moody
+3. Katie Tyler
 
 ### Final Proposal
 1. Persona/Scenario
@@ -11,9 +12,3 @@ Kyla Christopher-Moody
 2. Requirements Document
 
 3. Wireframes
-
-
-
-
-
-
