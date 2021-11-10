@@ -2,28 +2,24 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-            <title></title>
-
-        <!--put your external stylesheet links here-->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.0/dist/leaflet.css" />
         <link rel="stylesheet" href="css/style.css">
-        <!--[if IE<9]>
-            <link rel="stylesheet" href="css/style.ie.css">
-        <![endif]-->
-
+        <script src="https://unpkg.com/leaflet@1.7.0/dist/leaflet.js"></script>
          <!--you can also place internal styles here;
              place these within <style> tags-->
-        
+             <style>
+                 .map {
+                     position: absolute;
+                     width: 100%;
+                     height: 100%;
+                 }
+             </style>
     </head>
 
     <body>
-        <!--put your initial page content here-->
-
-        <!--you can also use this space for internal scripts;
-        place these within <script> tags-->
-
-        <!--put your external script links here-->
+        <div id="map" class="map"></div>
+        <script type="text/javascript" src="lib/jquery-3.6.0.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
-        <script type="text/javascript" src="lib/jquery-3.5.1.js"></script>
+
     </body>
 </html>
