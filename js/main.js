@@ -33,6 +33,7 @@ function Data(map) {
 
         //create a Leaflet GeoJSON layer and add it to the map
         L.geoJson(response, {
+            onEachFeature: onEachFeature,
             pointToLayer: function (feature, latlng) {
                 return L.circleMarker(latlng, geojsonMarkerOptions);
             }
@@ -52,6 +53,14 @@ function Data(map) {
     });
 };
 
+function zoomToFeature(e) {
+    map.fitBounds(e.target.getBounds());
+}
 
+function onEachFeature(feature, layer) {
+  layer.on({
+    click: zoomToFeature
+  });
+}
 
 $(document).ready(createMap);
