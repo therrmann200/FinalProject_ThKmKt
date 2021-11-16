@@ -70,7 +70,7 @@ info.onAdd = function (map) {
 //Update the info based on what state user has clicked on
 info.update = function (props) {
     this._div.innerHTML = '<h4>Fire Information</h4>' + (props ?
-        '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+        'Fire Name: ' + props.incidentna + '<br />' + 'Fire Year: ' + props.fireyear + '<br />' + 'Fire size: ' + props.gisacres + ' acres'
         : 'Hover over a fire');
 };
 
@@ -88,7 +88,7 @@ function highlightFeature(e) {
         layer.bringToFront();
     }
 
-    //info.update(layer.feature.properties);
+    info.update(layer.feature.properties);
 }
 
 
@@ -101,7 +101,7 @@ function resetHighlight(e) {
     dashArray: '',
     fillOpacity: 0.7
   });
-    //info.update();
+  info.update();
 }
 
 function zoomToFeature(e) {
