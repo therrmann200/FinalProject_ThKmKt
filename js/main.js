@@ -21,7 +21,7 @@ function createMap() {
 function Data(map) {
     //load the data
 
-    $.getJSON("data/co_fire.json", function (response) {
+    $.getJSON("data/co_fire_large.json", function (response) {
 
 
 
