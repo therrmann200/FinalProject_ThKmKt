@@ -1,5 +1,6 @@
 //insert code here!
 var map;
+var info = L.control();
 
 function createMap() {
 
@@ -13,6 +14,7 @@ function createMap() {
 
     //call getData function
     Data(map);
+    info.addTo(map);
 };
 
 //function to retrieve the data and place it on the map
@@ -21,19 +23,12 @@ function Data(map) {
 
     $.getJSON("data/co_fire.json", function (response) {
 
-        //create marker options
-        var geojsonMarkerOptions = {
-            radius: 2,
-            fillColor: "magenta",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
+
 
         //create a Leaflet GeoJSON layer and add it to the map
         L.geoJson(response, {
             onEachFeature: onEachFeature,
+            style: style,
             pointToLayer: function (feature, latlng) {
                 return L.circleMarker(latlng, geojsonMarkerOptions);
             }
@@ -53,12 +48,54 @@ function Data(map) {
     });
 };
 
+function style(feature) {
+    return {
+        weight: 2,
+        opacity: 1,
+        color: 'orange',
+        dashArray: '',
+        fillOpacity: 0.7
+    };
+}
+
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+
+    //info.update(layer.feature.properties);
+}
+
+
+function resetHighlight(e) {
+  var layer = e.target;
+  layer.setStyle({
+    weight: 2,
+    opacity: 1,
+    color: 'orange',
+    dashArray: '',
+    fillOpacity: 0.7
+  });
+    //info.update();
+}
+
 function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
 }
 
 function onEachFeature(feature, layer) {
   layer.on({
+    mouseover: highlightFeature,
+    mouseout: resetHighlight,
     click: zoomToFeature
   });
 }
