@@ -58,6 +58,22 @@ function style(feature) {
     };
 }
 
+//When adding the info
+info.onAdd = function (map) {
+    //"this" returns to info.
+    this._div = L.DomUtil.create('div', 'info');
+    //the following line calls info.update(props) function. Again, this refers to 'info' here
+    this.update();
+    return this._div;
+};
+
+//Update the info based on what state user has clicked on
+info.update = function (props) {
+    this._div.innerHTML = '<h4>Fire Information</h4>' + (props ?
+        '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+        : 'Hover over a fire');
+};
+
 function highlightFeature(e) {
     var layer = e.target;
 
