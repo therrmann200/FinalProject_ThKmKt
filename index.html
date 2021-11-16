@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.0/dist/leaflet.css" />
-        <link rel="stylesheet" href="css/style.css">
-        <script src="https://unpkg.com/leaflet@1.7.0/dist/leaflet.js"></script>
-         <!--you can also place internal styles here;
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/leaflet@1.7.0/dist/leaflet.js"></script>
+    <!--you can also place internal styles here;
              place these within <style> tags-->
-             <style>
-                 .map {
-                     position: absolute;
-                     width: 100%;
-                     height: 100%;
-                 }
-             </style>
-    </head>
+    <style>
+        .map {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
 
-    <body>
-        <div id="map" class="map"></div>
-        <script type="text/javascript" src="lib/jquery-3.6.0.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
+<body>
+    <div id="map" class="map"></div>
+    <script type="text/javascript" src="lib/jquery-3.6.0.js"></script>
+    <script type="text/javascript" src="lib/leaflet1.js"></script>
+    <script type="text/javascript" src="lib/geotiff.js"></script>
+    <script type="text/javascript" src="lib/plotty.js"></script>
 
-    </body>
+    <script type="text/javascript" src="lib/leaflet-geotiff.js"></script>
+
+    <script type="text/javascript" src="js/main.js"></script>
+    
+</body>
+
 </html>
