@@ -1,17 +1,17 @@
 //insert code here!
-var map;
+//var map;
 var info = L.control();
-
+let map = L.map('map');
 function createMap() {
 
-    map = L.map('map').setView([39.07269613220839, -105.375888968249], 7);
+    //map = L.map('map').setView([39.07269613220839, -105.375888968249], 7);
 
-    var openStreetMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    /*var openStreetMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
     })
 
     openStreetMap.addTo(map);
-
+*/
     //call getData function
     Data(map);
     info.addTo(map);
@@ -32,19 +32,7 @@ function Data(map) {
             pointToLayer: function (feature, latlng) {
                 return L.circleMarker(latlng, geojsonMarkerOptions);
             }
-        }).addTo(map);
-        var layer = L.leafletGeotiff("data/GeoTIFFproject/y2/Nov_2001.tif",options={band: 0,
-            displayMin: 0,
-            displayMax: 30,
-            name: 'Wind speed',
-            colorScale: 'rainbow',
-            clampLow: false,
-            clampHigh: true,
-            //vector:true,
-            arrowSize: 20,
-        }
-    ).addTo(map);
-
+        }).addTo(map).bringToFront();
     });
 };
 
@@ -93,15 +81,15 @@ function highlightFeature(e) {
 
 
 function resetHighlight(e) {
-  var layer = e.target;
-  layer.setStyle({
-    weight: 2,
-    opacity: 1,
-    color: 'orange',
-    dashArray: '',
-    fillOpacity: 0.4
-  });
-  info.update();
+    var layer = e.target;
+    layer.setStyle({
+        weight: 2,
+        opacity: 1,
+        color: 'orange',
+        dashArray: '',
+        fillOpacity: 0.4
+    });
+    info.update();
 }
 
 function zoomToFeature(e) {
@@ -109,11 +97,11 @@ function zoomToFeature(e) {
 }
 
 function onEachFeature(feature, layer) {
-  layer.on({
-    mouseover: highlightFeature,
-    mouseout: resetHighlight,
-    click: zoomToFeature
-  });
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
 }
 
-$(document).ready(createMap);
+$(document).ready(createMap());
