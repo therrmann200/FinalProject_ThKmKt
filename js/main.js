@@ -99,7 +99,7 @@ d3.request(geotiffUrl).responseType('arraybuffer').get(
 
             let valueHtmlContent = function (v) {
                 let formatedValue = (v ? v.toFixed(1) : (0).toFixed(1));
-                return '<span class="popupText">Value: ' + formatedValue + ' mm</span>';
+                return '<span class="popupText">Value: ' + formatedValue/10000 + ' NDVI';
             }
 
             if (e.frameChange) {
