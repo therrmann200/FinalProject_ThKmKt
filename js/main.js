@@ -54,7 +54,7 @@ function style(feature) {
         opacity: 1,
         color: 'orange',
         dashArray: '',
-        fillOpacity: 0.7
+        fillOpacity: 0.4
     };
 }
 
@@ -70,7 +70,7 @@ info.onAdd = function (map) {
 //Update the info based on what state user has clicked on
 info.update = function (props) {
     this._div.innerHTML = '<h4>Fire Information</h4>' + (props ?
-        'Fire Name: ' + props.incidentna + '<br />' + 'Fire Year: ' + props.fireyear + '<br />' + 'Fire size: ' + props.gisacres + ' acres'
+        'Fire Name: ' + props.incidentna + '<br />' + 'Fire Year: ' + props.fireyear + '<br />' + 'Fire Size: ' + props.gisacres + ' acres'
         : 'Hover over a fire');
 };
 
@@ -81,7 +81,7 @@ function highlightFeature(e) {
         weight: 5,
         color: '#666',
         dashArray: '',
-        fillOpacity: 0.7
+        fillOpacity: 0
     });
 
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -99,7 +99,7 @@ function resetHighlight(e) {
     opacity: 1,
     color: 'orange',
     dashArray: '',
-    fillOpacity: 0.7
+    fillOpacity: 0.4
   });
   info.update();
 }
