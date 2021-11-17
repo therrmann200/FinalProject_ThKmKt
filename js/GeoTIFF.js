@@ -1,15 +1,15 @@
 let geotiffUrl = 'data/NDVI500_2000_2005.tif';
-//let map = L.map('map');
+let map = L.map('map');
 let paneId = 'animated_pane';
 
-/* Dark basemap 
+//Dark basemap 
 let url = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png';
 L.tileLayer(url, {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
     pane: paneId
 }).addTo(map);
-*/
+
 /* Pane holder for the set of rasters */
 let paneObj = map.createPane(paneId);
 paneObj.style.pointerEvents = 'none';
@@ -49,7 +49,7 @@ d3.request(geotiffUrl).responseType('arraybuffer').get(
                 opacity: 0.65,
                 pane: paneId
             }).addTo(map);
-
+            
             playerReferences.push([layerSf, "At: " + padZeros(index, 2) + ":00"]);
 
             bounds = layerSf.getBounds();
@@ -117,7 +117,7 @@ d3.request(geotiffUrl).responseType('arraybuffer').get(
             }
 
         };
-
+        
         // move to first layer
         map.fitBounds(bounds);
         layersControl.goTo(0);

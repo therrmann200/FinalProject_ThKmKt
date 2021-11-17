@@ -1,7 +1,7 @@
 //insert code here!
 //var map;
 var info = L.control();
-let map = L.map('map');
+//let map = L.map('map');
 function createMap() {
 
     //map = L.map('map').setView([39.07269613220839, -105.375888968249], 7);
