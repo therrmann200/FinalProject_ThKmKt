@@ -1,6 +1,7 @@
 
 //insert code here!
 //var map;
+var dataStats = {};
 var info = L.control();
 //let map = L.map('map');
 function createMap() {
@@ -16,26 +17,28 @@ function createMap() {
     //call getData function
     Data(map);
     info.addTo(map);
+    
 };
 
-//function to retrieve the data and place it on the map
-function Data(map) {
-    //load the data
-
-    $.getJSON("data/co_fire_50_ndvi.json", function (response) {
-
-
-
-        //create a Leaflet GeoJSON layer and add it to the map
-        L.geoJson(response, {
-            onEachFeature: onEachFeature,
-            style: style,
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, geojsonMarkerOptions);
-            }
-        }).addTo(map).bringToFront();
-    });
-};
+function calcStats(data) {
+    //create empty array to store all data values
+    var allValues = [];
+    //loop through each city
+    for (var fire of data.features) {
+        //loop through each year
+        for (var year = 2000; year <= 2020; year++) {
+            //get population for current year
+            var value = fire.properties["ndvi" + String(year)];
+            //add value to array
+            allValues.push(value);
+        }
+    }
+    //get minimum value of our array
+    dataStats.min = Math.min(...allValues);
+    dataStats.max = Math.max(...allValues);
+    var sum = allValues.reduce(function (a, b) { return a + b });
+    dataStats.mean = sum / allValues.length;
+}
 
 function style(feature) {
     return {
@@ -104,5 +107,115 @@ function onEachFeature(feature, layer) {
         click: zoomToFeature
     });
 }
+
+//Above Example 3.10...Step 3: build an attributes array from the data
+function processData(data) {
+    //empty array to hold attributes
+    var attributes = [];
+
+    //properties of the first feature in the dataset
+    var properties = data.features[0].properties;
+
+    //push each attribute name into attributes array
+    for (var attribute in properties) {
+        //only take attributes with population values
+        if (attribute.indexOf("Pop") > -1) {
+            attributes.push(attribute);
+        };
+    };
+
+    //check result
+    console.log(attributes);
+
+    return attributes;
+};
+
+//Step 1: Create new sequence controls
+function createSequenceControls(attributes) {
+    var SequenceControl = L.Control.extend({
+        options: {
+            position: 'bottomleft'
+        },
+
+        onAdd: function () {
+            // create the control container div with a particular class name
+            var container = L.DomUtil.create('div', 'sequence-control-container');
+
+            $(container).append('<button class="step" id="reverse" title="Reverse">Reverse</button>');
+
+            //create range input element (slider)
+            $(container).append('<input class="range-slider" type="range">');
+
+            //add skip buttons
+            $(container).append('<button class="step" id="forward" title="Forward">Forward</button>');
+
+            L.DomEvent.disableClickPropagation(container);
+            return container;
+        }
+    });
+
+    map.addControl(new SequenceControl());
+
+
+    $('.range-slider').attr({
+        max: 6,
+        min: 0,
+        value: 0,
+        step: 1
+    });
+    $('#reverse').html('<img src="img/reverse.png" width="50">');
+    $('#forward').html('<img src="img/forward.png" width="50">');
+    $('.step').click(function () {
+        //get the old index value
+        var index = $('.range-slider').val();
+
+        //Step 6: increment or decrement depending on button clicked
+        if ($(this).attr('id') == 'forward') {
+            index++;
+            //Step 7: if past the last attribute, wrap around to first attribute
+            index = index > 6 ? 0 : index;
+        } else if ($(this).attr('id') == 'reverse') {
+            index--;
+            //Step 7: if past the first attribute, wrap around to last attribute
+            index = index < 0 ? 6 : index;
+        };
+
+        //Step 8: update slider
+        $('.range-slider').val(index);
+
+
+        //Called in both step button and slider event listener handlers
+        //Step 9: pass new attribute to update symbols
+        //updatePropSymbols(attributes[index]);
+    });
+    //Step 5: input listener for slider
+    $('.range-slider').on('input', function () {
+        var index = $(this).val();
+
+
+        //updatePropSymbols(attributes[index]);
+    });
+};
+//function to retrieve the data and place it on the map
+function Data(map) {
+    //load the data
+
+    $.getJSON("data/co_fire_50_ndvi.json", function (response) {
+        var attributes= processData(response);
+        calcStats(response);
+        //createPropSymbols(response, attributes);
+        createSequenceControls(attributes);
+        //createLegend(attributes);
+        //create a Leaflet GeoJSON layer and add it to the map
+        L.geoJson(response, {
+            onEachFeature: onEachFeature,
+            style: style,
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions);
+            }
+        }).addTo(map).bringToFront();
+    });
+};
+
 
 $(document).ready(createMap());
