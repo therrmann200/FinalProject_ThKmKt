@@ -149,7 +149,7 @@ function updatePropSymbols(attribute) {
                 return {
                     weight: 2,
                     opacity: 1,
-                    color: getColor(feature.properties.ndvi_2000),
+                    color: getColor(feature.properties[attribute]),
                     dashArray: '',
                     fillOpacity: 0.4
                 };
@@ -240,6 +240,7 @@ function Data(map) {
         //create a Leaflet GeoJSON layer and add it to the map
         L.geoJson(response, {
             onEachFeature: onEachFeature,
+            style: style,
             pointToLayer: function (feature, latlng) {
                 var attribute = attributes[0];
 
