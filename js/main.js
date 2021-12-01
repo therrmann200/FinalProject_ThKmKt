@@ -17,18 +17,18 @@ function createMap() {
     //call getData function
     Data(map);
     info.addTo(map);
-    
+
 };
 
 function calcStats(data) {
     //create empty array to store all data values
     var allValues = [];
     //loop through each city
-    for (var fire of data.features) {
+    for (var incidentna of data.features) {
         //loop through each year
         for (var year = 2000; year <= 2020; year++) {
             //get population for current year
-            var value = fire.properties["ndvi" + String(year)];
+            var value = incidentna.properties["ndvi_" + String(year)];
             //add value to array
             allValues.push(value);
         }
@@ -38,13 +38,15 @@ function calcStats(data) {
     dataStats.max = Math.max(...allValues);
     var sum = allValues.reduce(function (a, b) { return a + b });
     dataStats.mean = sum / allValues.length;
+    console.log(dataStats.max)
+    console.log(dataStats.min)
 }
 
 function style(feature) {
     return {
         weight: 2,
         opacity: 1,
-        color: 'orange',
+        color: getColor(feature.properties.ndvi_2000),
         dashArray: '',
         fillOpacity: 0.4
     };
@@ -65,6 +67,16 @@ info.update = function (props) {
         'Fire Name: ' + props.incidentna + '<br />' + 'Fire Year: ' + props.fireyear + '<br />' + 'Fire Size: ' + props.gisacres + ' acres'
         : 'Hover over a fire');
 };
+
+function getColor(d) {
+    return d > 5062 ? '#005a32' :
+        d > 4282 ? '#238b45' :
+            d > 3375 ? '#41ab5d' :
+                d > 2531 ? '#74c476' :
+                    d > 1687 ? '#a1d99b' :
+                        d > 843.7 ? '#c7e9c0' :
+                            '#edf8e9';
+}
 
 function highlightFeature(e) {
     var layer = e.target;
@@ -119,7 +131,7 @@ function processData(data) {
     //push each attribute name into attributes array
     for (var attribute in properties) {
         //only take attributes with population values
-        if (attribute.indexOf("Pop") > -1) {
+        if (attribute.indexOf("ndvi") > -1) {
             attributes.push(attribute);
         };
     };
@@ -129,6 +141,9 @@ function processData(data) {
 
     return attributes;
 };
+
+
+
 
 //Step 1: Create new sequence controls
 function createSequenceControls(attributes) {
@@ -201,7 +216,7 @@ function Data(map) {
     //load the data
 
     $.getJSON("data/co_fire_50_ndvi.json", function (response) {
-        var attributes= processData(response);
+        var attributes = processData(response);
         calcStats(response);
         //createPropSymbols(response, attributes);
         createSequenceControls(attributes);
