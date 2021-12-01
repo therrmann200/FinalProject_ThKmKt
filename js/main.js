@@ -142,7 +142,24 @@ function processData(data) {
     return attributes;
 };
 
-
+function updatePropSymbols(attribute) {
+    var year = attribute.split("_")[1];
+    $("span.year").html(year);
+    map.eachLayer(function (layer) {
+        if (layer.feature && layer.feature.properties[attribute]) {
+            function style(feature) {
+                return {
+                    weight: 2,
+                    opacity: 1,
+                    color: getColor(feature.properties.ndvi_2000),
+                    dashArray: '',
+                    fillOpacity: 0.4
+                };
+            }
+        };
+    });
+    //updateLegend(attribute);
+};
 
 
 //Step 1: Create new sequence controls
@@ -172,8 +189,9 @@ function createSequenceControls(attributes) {
     map.addControl(new SequenceControl());
 
 
+
     $('.range-slider').attr({
-        max: 6,
+        max: 20,
         min: 0,
         value: 0,
         step: 1
@@ -188,11 +206,11 @@ function createSequenceControls(attributes) {
         if ($(this).attr('id') == 'forward') {
             index++;
             //Step 7: if past the last attribute, wrap around to first attribute
-            index = index > 6 ? 0 : index;
+            index = index > 20 ? 0 : index;
         } else if ($(this).attr('id') == 'reverse') {
             index--;
             //Step 7: if past the first attribute, wrap around to last attribute
-            index = index < 0 ? 6 : index;
+            index = index < 20 ? 6 : index;
         };
 
         //Step 8: update slider
@@ -201,14 +219,14 @@ function createSequenceControls(attributes) {
 
         //Called in both step button and slider event listener handlers
         //Step 9: pass new attribute to update symbols
-        //updatePropSymbols(attributes[index]);
+        updatePropSymbols(attributes[index]);
     });
     //Step 5: input listener for slider
     $('.range-slider').on('input', function () {
         var index = $(this).val();
 
 
-        //updatePropSymbols(attributes[index]);
+        updatePropSymbols(attributes[index]);
     });
 };
 //function to retrieve the data and place it on the map
@@ -224,9 +242,42 @@ function Data(map) {
         //create a Leaflet GeoJSON layer and add it to the map
         L.geoJson(response, {
             onEachFeature: onEachFeature,
-            style: style,
             pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, geojsonMarkerOptions);
+                var attribute = attributes[0];
+
+                //create marker options
+                var options = {
+                    fillColor: getColor(feature.properties.attValue),
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                };
+            
+                //For each feature, determine its value for the selected attribute
+                var attValue = Number(feature.properties[attribute]);
+                
+            
+                //Give each feature's circle marker a radius based on its attribute value
+                options.fillColor = getColor(feature.properties.attValue);
+            
+                //create circle marker layer
+                var layer = L.circleMarker(latlng, options);
+            
+                /*build popup content string
+                var popupContent = new PopupContent(feature.properties, attribute);
+            
+                var popupContent2 = Object.create(popupContent);
+            
+                popupContent2.formatted = "<h2>" + popupContent.population + " million</h2>";
+            
+                layer.bindPopup(popupContent2.formatted, {
+                    offset: new L.Point(0, -options.radius)
+                });
+                console.log(popupContent.formatted);
+                */
+            
+                //return the circle marker to the L.geoJson pointToLayer option
+                return layer;
             }
         }).addTo(map).bringToFront();
     });
