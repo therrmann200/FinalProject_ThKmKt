@@ -149,7 +149,7 @@ function updatePropSymbols(attribute) {
                 return {
                     weight: 2,
                     opacity: 1,
-                    color: getColor(feature.properties[attribute]),
+                    color: getColor(Number(feature.properties[attribute])),
                     dashArray: '',
                     fillOpacity: 0.4
                 };
@@ -208,7 +208,8 @@ function createSequenceControls(attributes) {
         } else if ($(this).attr('id') == 'reverse') {
             index--;
             //Step 7: if past the first attribute, wrap around to last attribute
-            index = index < 20 ? 6 : index;
+            index = index < 0 ? 20 : index;
+            console.log(attributes[index]);
         };
 
         //Step 8: update slider
@@ -246,7 +247,7 @@ function Data(map) {
 
                 //create marker options
                 var options = {
-                    fillColor: getColor(feature.properties.attValue),
+                    fillColor: getColor(Number(feature.properties[attribute])),
                     weight: 1,
                     opacity: 1,
                     fillOpacity: 0.8
