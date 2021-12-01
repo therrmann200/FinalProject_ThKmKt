@@ -83,7 +83,6 @@ function highlightFeature(e) {
 
     layer.setStyle({
         weight: 5,
-        color: '#666',
         dashArray: '',
         fillOpacity: 0
     });
@@ -101,7 +100,6 @@ function resetHighlight(e) {
     layer.setStyle({
         weight: 2,
         opacity: 1,
-        color: 'orange',
         dashArray: '',
         fillOpacity: 0.4
     });
