@@ -1,8 +1,17 @@
 /*insert style here*/
 #map {
-    width: 800px;
-    height: 500px;
+    width: 50%;
+    height: 100%;
 }
+
+#graph {
+  width: 50%;
+  height: 50%;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
 
 .info {
     padding: 6px 8px;
