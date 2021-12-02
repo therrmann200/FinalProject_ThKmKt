@@ -40,7 +40,70 @@ function calcStats(data) {
     dataStats.mean = sum / allValues.length;
     console.log(dataStats.max)
     console.log(dataStats.min)
+    console.log(allValues)
 }
+
+//Above Example 3.10...Step 3: build an attributes array from the data
+function processData(data) {
+    //empty array to hold attributes
+    var attributes = [];
+
+    //properties of the first feature in the dataset
+    var properties = data.features[0].properties;
+
+    //push each attribute name into attributes array
+    for (var attribute in properties) {
+        //only take attributes with population values
+        if (attribute.indexOf("ndvi") > -1) {
+            attributes.push(attribute);
+        };
+    };
+
+    //check result
+    console.log(attributes);
+
+    return attributes;
+};
+
+/*//function to convert markers to circle markers
+function pointToLayer(feature, latlng, attributes) {
+    //Determine which attribute to visualize with proportional symbols
+    var attribute = attributes[0];
+
+    //create marker options
+    var options = {
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
+
+    //For each feature, determine its value for the selected attribute
+    var attValue = feature.properties[attribute];
+
+    //Give each feature's circle marker a radius based on its attribute value
+    options.color = getColor(attValue);
+
+    //create circle marker layer
+    var layer = L.geoJson(options);
+
+    console.log(attValue);
+    //return the circle marker to the L.geoJson pointToLayer option
+    return layer;
+};*/
+
+
+//Add circle markers for point features to the map
+function createPropSymbols(data, attributes) {
+    //create a Leaflet GeoJSON layer and add it to the map
+    L.geoJson(data, {
+        onEachFeature: onEachFeature,
+        style: style
+        /*
+        pointToLayer: function (feature, latlng) {
+           return pointToLayer(feature, latlng, attributes);
+        }*/
+    }).addTo(map);
+};
 
 function style(feature) {
     return {
@@ -118,43 +181,20 @@ function onEachFeature(feature, layer) {
     });
 }
 
-//Above Example 3.10...Step 3: build an attributes array from the data
-function processData(data) {
-    //empty array to hold attributes
-    var attributes = [];
-
-    //properties of the first feature in the dataset
-    var properties = data.features[0].properties;
-
-    //push each attribute name into attributes array
-    for (var attribute in properties) {
-        //only take attributes with population values
-        if (attribute.indexOf("ndvi") > -1) {
-            attributes.push(attribute);
-        };
-    };
-
-    //check result
-    console.log(attributes);
-
-    return attributes;
-};
-
 function updatePropSymbols(attribute) {
     var year = attribute.split("_")[1];
     $("span.year").html(year);
     map.eachLayer(function (layer) {
         if (layer.feature && layer.feature.properties[attribute]) {
-            function style(feature) {
-                return {
+            layer.setStyle({
                     weight: 2,
                     opacity: 1,
-                    color: getColor(Number(feature.properties[attribute])),
+                    color: getColor(layer.feature.properties[attribute]),
                     dashArray: '',
                     fillOpacity: 0.4
-                };
+                })
             }
-        };
+
     });
     //updateLegend(attribute);
 };
@@ -231,15 +271,14 @@ function createSequenceControls(attributes) {
 //function to retrieve the data and place it on the map
 function Data(map) {
     //load the data
-
     $.getJSON("data/co_fire_50_ndvi.json", function (response) {
         var attributes = processData(response);
         calcStats(response);
-        //createPropSymbols(response, attributes);
+        createPropSymbols(response, attributes);
         createSequenceControls(attributes);
         //createLegend(attributes);
         //create a Leaflet GeoJSON layer and add it to the map
-        L.geoJson(response, {
+        /*L.geoJson(response, {
             onEachFeature: onEachFeature,
             style: style,
             pointToLayer: function (feature, latlng) {
@@ -274,12 +313,12 @@ function Data(map) {
                     offset: new L.Point(0, -options.radius)
                 });
                 console.log(popupContent.formatted);
-                */
+                /
             
                 //return the circle marker to the L.geoJson pointToLayer option
                 return layer;
             }
-        }).addTo(map).bringToFront();
+        }).addTo(map).bringToFront();*/
     });
 };
 
