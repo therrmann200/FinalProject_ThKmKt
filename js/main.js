@@ -8,8 +8,9 @@ function createMap() {
 
     map = L.map('map').setView([39.07269613220839, -105.375888968249], 7);
 
-    var openStreetMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    var openStreetMap = L.tileLayer('https://api.mapbox.com/styles/v1/therrmann/ckwpbw6m212h514p4x02rfbn5/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidGhlcnJtYW5uIiwiYSI6ImNrdGFuMHltYjFvM2oydW8wOGExaGJjZXUifQ.uQ3ywlhCjj5tRLf5Y3lcGQ', {
+        attribution: '&copy; <a href=”https://www.mapbox.com/about/maps/”>Mapbox</a> &copy; <a href=”http://www.openstreetmap.org/copyright”>OpenStreetMap</a>'
+        
     })
 
     openStreetMap.addTo(map);
