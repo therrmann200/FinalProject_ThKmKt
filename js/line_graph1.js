@@ -1,14 +1,14 @@
 "use strict";
 
 function triggerLineHighlight(fireID) {
-  //document.getElementById(fireID).classList.remove('line');
-  //document.getElementById(fireID).classList.add('lineHover');
+  document.getElementById(fireID).classList.remove('line');
+  document.getElementById(fireID).classList.add('lineHover');
   console.log('fire  id: ' + fireID);
 }
 
 function triggerLineReset(fireID) {
-  //document.getElementById(fireID + 'Line').classList.remove('lineHover');
-  //document.getElementById(fireID + 'Line').classList.add('line');
+  document.getElementById(fireID).classList.remove('lineHover');
+  document.getElementById(fireID).classList.add('line');
 }
 
 // set the dimensions and margins of the graph
@@ -105,7 +105,8 @@ svg.append("text")
       return color(d.key)
     })
     .attr("stroke-width", 1.5)
-    .attr("FID_1", function(sumstat) {return sumstat.FID_1;})
+    .attr("stroke-opacity", 0.4)
+    .attr("id", function(d) {return d.key;})
     .attr("d", function(d) {
       return d3.line()
         .x(function(d) {
@@ -119,7 +120,9 @@ svg.append("text")
     .on("mouseover", function (d) {
        console.log("Mouse is on " + d.key);
        triggerMapHighlight(d.key);
-       d3.select(this).style("stroke","green").attr("stroke-width", 2.5);
+       d3.select(this).style("stroke","green")
+       .attr("stroke-width", 2.5)
+       .attr("stroke-opacity", 1);
      })
      .on("mouseout", function (d) {
        console.log("Mouse moved out of " + d.key);
@@ -127,6 +130,7 @@ svg.append("text")
          return color(d.key)
        })
        .attr("stroke-width", 1.5)
+       .attr("stroke-opacity", 0.4)
        triggerMapReset(d.key);
      })
 

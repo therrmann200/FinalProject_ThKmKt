@@ -62,20 +62,22 @@
 	cursor: move;
 }
 
-.step {  
-  width: 40px;  
-}  
+.step {
+  width: 40px;
+}
 
-.step img {  
-  width: 100%;  
-  height: auto;  
-} 
+.step img {
+  width: 100%;
+  height: auto;
+}
 .line {
   stroke: #a3b4a0;
   stroke-width: 1.5;
+  stroke-opacity: .4;
 }
 
 .lineHover {
-  stroke: #005a32;
+  stroke: green;
   stroke-width: 2;
+  stroke-opacity: 1
 }
