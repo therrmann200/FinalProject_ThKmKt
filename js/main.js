@@ -148,41 +148,41 @@ function highlightFeature(e) {
 function triggerMapHighlight(fire) {
     //console.log("triggerMapHighlight function starts")
     var layers = geojson.getLayers();
-      //iterate through getLayers
+    //iterate through getLayers
     for (var i = 0; i < layers.length; i++) {
-      //only if the state name is the same as the one passed to the function, change style
-      //console.log(layers[i].feature.properties.FID_1);
-      if (layers[i].feature.properties.FID_1 == fire) {
-        console.log("true");
+        //only if the state name is the same as the one passed to the function, change style
+        //console.log(layers[i].feature.properties.FID_1);
+        if (layers[i].feature.properties.FID_1 == fire) {
+            console.log("true");
 
-        var layer = layers[i];
+            var layer = layers[i];
 
-        layer.setStyle({
-          weight: 5,
-          dashArray: '',
-          fillOpacity: .7
-        });
-        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-          layer.bringToFront();
+            layer.setStyle({
+                weight: 5,
+                dashArray: '',
+                fillOpacity: .7
+            });
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                layer.bringToFront();
+            }
+            info.update(layer.feature.properties);
         }
-        info.update(layer.feature.properties);
-      }
     }
-  }
+}
 
-  function triggerMapReset (fire) {
+function triggerMapReset(fire) {
     //an array holding all the "layers" of the geojson "layergroup"
     var layers = geojson.getLayers();
     //iterate through getLayers
     for (var i = 0; i < layers.length; i++) {
-      //only if state name is same as on passed to function, change style
-      if (layers[i].feature.properties.FID_1 == fire) {
-        var layer = layers[i];
-        geojson.resetStyle(layer);
-        info.update();
-      }
+        //only if state name is same as on passed to function, change style
+        if (layers[i].feature.properties.FID_1 == fire) {
+            var layer = layers[i];
+            geojson.resetStyle(layer);
+            info.update();
+        }
     }
-  }
+}
 
 function resetHighlight(e) {
     var layer = e.target;
@@ -206,10 +206,8 @@ function onEachFeature(feature, layer, attribute) {
         mouseout: resetHighlight,
         click: zoomToFeature
     });
-    if (layer.feature.properties) {
-        layer.bindPopup("NDVI: " + layer.feature.properties[attribute]
-        + " <br><br>");
-    }
+
+
 }
 function updateLegend(attribute) {
     var year = attribute.split("_")[1];
@@ -222,13 +220,14 @@ function updatePropSymbols(attribute) {
     map.eachLayer(function (layer) {
         if (layer.feature && layer.feature.properties[attribute]) {
             layer.setStyle({
-                    weight: 2,
-                    opacity: 1,
-                    color: getColor(layer.feature.properties[attribute]),
-                    dashArray: '',
-                    fillOpacity: 0.4
-                })
-            }
+                weight: 2,
+                opacity: 1,
+                color: getColor(layer.feature.properties[attribute]),
+                dashArray: '',
+                fillOpacity: 0.4
+            })
+            layer.bindPopup("NDVI: " + Math.round(layer.feature.properties[attribute])/ 10000);
+        }
 
     });
     updateLegend(attribute);
@@ -316,17 +315,17 @@ function createLegend(attributes) {
         onAdd: function () {
             // create the control container with a particular class name
             var div2 = L.DomUtil.create('div', 'info legend'),
-        grades = [0, .0844, .1688, .2532, .3376, .4283, .5063],
-        labels = [];
-        $(div2).append('<h7 class= "temporalLegend">Average NDVI in <span class="year">2000</span></h7>'+'<br />')
-    // loop through our density intervals and generate a label with a colored square for each interval
-    for (var i = 0; i < grades.length; i++) {
-        $(div2).append(
-            '<i style="background:' + getColor(grades[i]*10000) + '"></i> ' +
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'));
-    }
+                grades = [0, .0844, .1688, .2532, .3376, .4283, .5063],
+                labels = [];
+            $(div2).append('<h7 class= "temporalLegend">Average NDVI in <span class="year">2000</span></h7>' + '<br />')
+            // loop through our density intervals and generate a label with a colored square for each interval
+            for (var i = 0; i < grades.length; i++) {
+                $(div2).append(
+                    '<i style="background:' + getColor(grades[i] * 10000) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'));
+            }
 
-    return div2;
+            return div2;
         }
     });
 
@@ -391,18 +390,18 @@ function Data(map) {
 
 $(document).ready(createMap());
 
-(function() {
-	var control = new L.Control({position:'topright'});
-	control.onAdd = function(map) {
-			var azoom = L.DomUtil.create('a','resetzoom');
-			azoom.innerHTML = "[Reset Zoom]";
-			L.DomEvent
-				.disableClickPropagation(azoom)
-				.addListener(azoom, 'click', function() {
-					map.setView([39.07269613220839, -105.375888968249], 7);
-				},azoom);
-			return azoom;
-		};
-	return control;
+(function () {
+    var control = new L.Control({ position: 'topright' });
+    control.onAdd = function (map) {
+        var azoom = L.DomUtil.create('a', 'resetzoom');
+        azoom.innerHTML = "[Reset Zoom]";
+        L.DomEvent
+            .disableClickPropagation(azoom)
+            .addListener(azoom, 'click', function () {
+                map.setView([39.07269613220839, -105.375888968249], 7);
+            }, azoom);
+        return azoom;
+    };
+    return control;
 }())
-.addTo(map);
+    .addTo(map);
