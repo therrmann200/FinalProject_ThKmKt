@@ -61,3 +61,12 @@
   width: 100%;  
   height: auto;  
 } 
+.line {
+  stroke: #a3b4a0;
+  stroke-width: 1.5;
+}
+
+.lineHover {
+  stroke: #005a32;
+  stroke-width: 2;
+}

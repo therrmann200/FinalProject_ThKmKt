@@ -2,6 +2,7 @@
 //insert code here!
 //var map;
 var dataStats = {};
+var geojson;
 var info = L.control();
 var map = L.map('map').setView([39.07269613220839, -105.375888968249], 7);
 //let map = L.map('map');
@@ -9,7 +10,7 @@ function createMap() {
 
     var openStreetMap = L.tileLayer('https://api.mapbox.com/styles/v1/therrmann/ckwpbw6m212h514p4x02rfbn5/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidGhlcnJtYW5uIiwiYSI6ImNrdGFuMHltYjFvM2oydW8wOGExaGJjZXUifQ.uQ3ywlhCjj5tRLf5Y3lcGQ', {
         attribution: '&copy; <a href=”https://www.mapbox.com/about/maps/”>Mapbox</a> &copy; <a href=”http://www.openstreetmap.org/copyright”>OpenStreetMap</a>'
-        
+
     })
 
     openStreetMap.addTo(map);
@@ -78,7 +79,7 @@ function PopupContent(properties, attribute) {
 //Add circle markers for point features to the map
 function createPropSymbols(data, attributes) {
     //create a Leaflet GeoJSON layer and add it to the map
-    L.geoJson(data, {
+    geojson = L.geoJson(data, {
         onEachFeature: onEachFeature,
         style: style
         /*
@@ -110,7 +111,7 @@ info.onAdd = function (map) {
 //Update the info based on what state user has clicked on
 info.update = function (props) {
     this._div.innerHTML = '<h4>Fire Information</h4>' + (props ?
-        'Fire Name: ' + props.incidentna + '<br />' + 'Fire Year: ' + props.fireyear + '<br />' + 'Fire Size: ' + Math.round(props.gisacres) + ' acres' 
+        'Fire Name: ' + props.incidentna + '<br />' + 'Fire Year: ' + props.fireyear + '<br />' + 'Fire Size: ' + Math.round(props.gisacres) + ' acres'
         : 'Hover over a fire');
 };
 
@@ -138,8 +139,50 @@ function highlightFeature(e) {
     }
 
     info.update(layer.feature.properties);
+
+    console.log('fire id: ' + layer.feature.properties.FID_1);
+    triggerLineHighlight(layer.feature.properties.FID_1);
 }
 
+
+function triggerMapHighlight(fire) {
+    //console.log("triggerMapHighlight function starts")
+    var layers = geojson.getLayers();
+      //iterate through getLayers
+    for (var i = 0; i < layers.length; i++) {
+      //only if the state name is the same as the one passed to the function, change style
+      //console.log(layers[i].feature.properties.FID_1);
+      if (layers[i].feature.properties.FID_1 == fire) {
+        console.log("true");
+
+        var layer = layers[i];
+
+        layer.setStyle({
+          weight: 5,
+          dashArray: '',
+          fillOpacity: .7
+        });
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+          layer.bringToFront();
+        }
+        info.update(layer.feature.properties);
+      }
+    }
+  }
+
+  function triggerMapReset (fire) {
+    //an array holding all the "layers" of the geojson "layergroup"
+    var layers = geojson.getLayers();
+    //iterate through getLayers
+    for (var i = 0; i < layers.length; i++) {
+      //only if state name is same as on passed to function, change style
+      if (layers[i].feature.properties.FID_1 == fire) {
+        var layer = layers[i];
+        geojson.resetStyle(layer);
+        info.update();
+      }
+    }
+  }
 
 function resetHighlight(e) {
     var layer = e.target;
@@ -150,6 +193,7 @@ function resetHighlight(e) {
         fillOpacity: 0.4
     });
     info.update();
+    triggerLineReset(layer.feature.properties.FID_1);
 }
 
 function zoomToFeature(e) {
@@ -277,7 +321,7 @@ function createLegend(attributes) {
         $(div2).append('<h7 class= "temporalLegend">Average NDVI in <span class="year">2000</span></h7>'+'<br />')
     // loop through our density intervals and generate a label with a colored square for each interval
     for (var i = 0; i < grades.length; i++) {
-        $(div2).append(  
+        $(div2).append(
             '<i style="background:' + getColor(grades[i]*10000) + '"></i> ' +
             grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'));
     }
@@ -313,30 +357,30 @@ function Data(map) {
                     opacity: 1,
                     fillOpacity: 0.8
                 };
-            
+
                 //For each feature, determine its value for the selected attribute
                 var attValue = Number(feature.properties[attribute]);
-                
-            
+
+
                 //Give each feature's circle marker a radius based on its attribute value
                 options.fillColor = getColor(feature.properties.attValue);
-            
+
                 //create circle marker layer
                 var layer = L.circleMarker(latlng, options);
-            
+
                 /*build popup content string
                 var popupContent = new PopupContent(feature.properties, attribute);
-            
+
                 var popupContent2 = Object.create(popupContent);
-            
+
                 popupContent2.formatted = "<h2>" + popupContent.population + " million</h2>";
-            
+
                 layer.bindPopup(popupContent2.formatted, {
                     offset: new L.Point(0, -options.radius)
                 });
                 console.log(popupContent.formatted);
                 /
-            
+
                 //return the circle marker to the L.geoJson pointToLayer option
                 return layer;
             }
