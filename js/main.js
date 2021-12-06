@@ -3,10 +3,9 @@
 //var map;
 var dataStats = {};
 var info = L.control();
+var map = L.map('map').setView([39.07269613220839, -105.375888968249], 7);
 //let map = L.map('map');
 function createMap() {
-
-    map = L.map('map').setView([39.07269613220839, -105.375888968249], 7);
 
     var openStreetMap = L.tileLayer('https://api.mapbox.com/styles/v1/therrmann/ckwpbw6m212h514p4x02rfbn5/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidGhlcnJtYW5uIiwiYSI6ImNrdGFuMHltYjFvM2oydW8wOGExaGJjZXUifQ.uQ3ywlhCjj5tRLf5Y3lcGQ', {
         attribution: '&copy; <a href=”https://www.mapbox.com/about/maps/”>Mapbox</a> &copy; <a href=”http://www.openstreetmap.org/copyright”>OpenStreetMap</a>'
@@ -66,31 +65,14 @@ function processData(data) {
     return attributes;
 };
 
-/*//function to convert markers to circle markers
-function pointToLayer(feature, latlng, attributes) {
-    //Determine which attribute to visualize with proportional symbols
-    var attribute = attributes[0];
-
-    //create marker options
-    var options = {
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8
-    };
-
-    //For each feature, determine its value for the selected attribute
-    var attValue = feature.properties[attribute];
-
-    //Give each feature's circle marker a radius based on its attribute value
-    options.color = getColor(attValue);
-
-    //create circle marker layer
-    var layer = L.geoJson(options);
-
-    console.log(attValue);
-    //return the circle marker to the L.geoJson pointToLayer option
-    return layer;
-};*/
+//Example 1.2 line 1...PopupContent constructor function
+function PopupContent(properties, attribute) {
+    this.properties = properties;
+    this.attribute = attribute;
+    this.year = attribute.split("_")[1];
+    this.ndvi = this.properties[attribute];
+    this.formatted = "</p><p><b>NDVI in " + this.year + ":</b> " + this.ndvi + "</p>";
+};
 
 
 //Add circle markers for point features to the map
@@ -128,7 +110,7 @@ info.onAdd = function (map) {
 //Update the info based on what state user has clicked on
 info.update = function (props) {
     this._div.innerHTML = '<h4>Fire Information</h4>' + (props ?
-        'Fire Name: ' + props.incidentna + '<br />' + 'Fire Year: ' + props.fireyear + '<br />' + 'Fire Size: ' + props.gisacres + ' acres'
+        'Fire Name: ' + props.incidentna + '<br />' + 'Fire Year: ' + props.fireyear + '<br />' + 'Fire Size: ' + Math.round(props.gisacres) + ' acres' 
         : 'Hover over a fire');
 };
 
@@ -148,7 +130,7 @@ function highlightFeature(e) {
     layer.setStyle({
         weight: 5,
         dashArray: '',
-        fillOpacity: 0
+        fillOpacity: .7
     });
 
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -181,7 +163,11 @@ function onEachFeature(feature, layer) {
         click: zoomToFeature
     });
 }
-
+function updateLegend(attribute) {
+    var year = attribute.split("_")[1];
+    var content = "NDVI in " + year;
+    $("temporal-legend").html(year);
+};
 function updatePropSymbols(attribute) {
     var year = attribute.split("_")[1];
     $("span.year").html(year);
@@ -197,7 +183,7 @@ function updatePropSymbols(attribute) {
             }
 
     });
-    //updateLegend(attribute);
+    updateLegend(attribute);
 };
 
 
@@ -219,6 +205,8 @@ function createSequenceControls(attributes) {
 
             //add skip buttons
             $(container).append('<button class="step" id="forward" title="Forward">Forward</button>');
+
+            //$(container.append('year = ' + attributes[index]))
 
             L.DomEvent.disableClickPropagation(container);
             return container;
@@ -269,6 +257,35 @@ function createSequenceControls(attributes) {
         updatePropSymbols(attributes[index]);
     });
 };
+
+
+function createLegend(attributes) {
+    var LegendControl = L.Control.extend({
+        options: {
+            position: 'bottomright'
+        },
+
+        onAdd: function () {
+            // create the control container with a particular class name
+            var div2 = L.DomUtil.create('div', 'info legend'),
+        grades = [0, .0844, .1688, .2532, .3376, .4283, .5063],
+        labels = [];
+        $(div2).append('<h7 class= "temporalLegend">Average NDVI in <span class="year">2000</span></h7>'+'<br />')
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        $(div2).append(  
+            '<i style="background:' + getColor(grades[i]*10000) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'));
+    }
+
+    return div2;
+        }
+    });
+
+    map.addControl(new LegendControl());
+};
+
+
 //function to retrieve the data and place it on the map
 function Data(map) {
     //load the data
@@ -277,7 +294,7 @@ function Data(map) {
         calcStats(response);
         createPropSymbols(response, attributes);
         createSequenceControls(attributes);
-        //createLegend(attributes);
+        createLegend(attributes);
         //create a Leaflet GeoJSON layer and add it to the map
         /*L.geoJson(response, {
             onEachFeature: onEachFeature,
