@@ -35,3 +35,13 @@
   margin-right: 8px;
   opacity: 0.7;
 }
+
+.line {
+  stroke: #a3b4a0;
+  stroke-width: 1.5;
+}
+
+.lineHover {
+  stroke: #005a32;
+  stroke-width: 2;
+}

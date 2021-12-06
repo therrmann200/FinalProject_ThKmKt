@@ -1,6 +1,8 @@
+"use strict";
+
 function triggerLineHighlight(fireID) {
   //document.getElementById(fireID).classList.remove('line');
-  document.getElementById(fireID).classList.add('lineHover');
+  //document.getElementById(fireID).classList.add('lineHover');
   console.log('fire  id: ' + fireID);
 }
 
@@ -21,12 +23,16 @@ var margin = {
 
 // append the svg object to the body of the page
 var svg = d3.select("#graph")
-  .append("svg")
+  .append("svg:svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr("transform",
     "translate(" + margin.left + "," + margin.top + ")");
+
+    var g = svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 
 //Read the data
 d3.csv("../data/ndvi_reformat1.csv", function(data) {
@@ -91,7 +97,7 @@ svg.append("text")
     .range(['#a3b4a0', '#a3b4a0', '#a3b4a0', '#a3b4a0', '#a3b4a0', '#a3b4a0', '#a3b4a0', '#a3b4a0', '#a3b4a0'])
   // Draw the line
   svg.selectAll(".line")
-    .data(sumstat)
+    .data(sumstat, function(d) { return d.key; })
     .enter()
     .append("path")
     .attr("fill", "none")
@@ -110,8 +116,13 @@ svg.append("text")
         })
         (d.values)
     })
-    .on("mouseover", function (event, sumstat) {
-       console.log("Mouse is on " + sumstat.FID_1);
+    .on("mouseover", function (d) {
+       console.log("Mouse is on " + d.key);
+       triggerMapHighlight(d.key);
+     })
+     .on("mouseout", function (d) {
+       console.log("Mouse moved out of " + d.key);
+       triggerMapReset(d.key);
      })
 
 })
