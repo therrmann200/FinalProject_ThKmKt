@@ -119,9 +119,14 @@ svg.append("text")
     .on("mouseover", function (d) {
        console.log("Mouse is on " + d.key);
        triggerMapHighlight(d.key);
+       d3.select(this).style("stroke","green").attr("stroke-width", 2.5);
      })
      .on("mouseout", function (d) {
        console.log("Mouse moved out of " + d.key);
+       d3.select(this).style("stroke", function(d) {
+         return color(d.key)
+       })
+       .attr("stroke-width", 1.5)
        triggerMapReset(d.key);
      })
 
