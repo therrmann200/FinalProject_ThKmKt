@@ -156,12 +156,16 @@ function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
 }
 
-function onEachFeature(feature, layer) {
+function onEachFeature(feature, layer, attribute) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
         click: zoomToFeature
     });
+    if (layer.feature.properties) {
+        layer.bindPopup("NDVI: " + layer.feature.properties[attribute]
+        + " <br><br>");
+    }
 }
 function updateLegend(attribute) {
     var year = attribute.split("_")[1];
@@ -342,3 +346,19 @@ function Data(map) {
 
 
 $(document).ready(createMap());
+
+(function() {
+	var control = new L.Control({position:'topright'});
+	control.onAdd = function(map) {
+			var azoom = L.DomUtil.create('a','resetzoom');
+			azoom.innerHTML = "[Reset Zoom]";
+			L.DomEvent
+				.disableClickPropagation(azoom)
+				.addListener(azoom, 'click', function() {
+					map.setView([39.07269613220839, -105.375888968249], 7);
+				},azoom);
+			return azoom;
+		};
+	return control;
+}())
+.addTo(map);
