@@ -22,6 +22,7 @@
   right: 0;
   background-color: white;
   color:black;
+  overflow-y: auto;
 }
 
 .info {
