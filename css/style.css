@@ -14,15 +14,30 @@
   color: blue;
 }
 
+#background {
+  width: 50%;
+  height: 50%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-image: url(../img/fire.jpg);
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  filter:blur(2px);
+  -webkit-filter: blur(2px);
+  color:white;
+  overflow-y: auto;
+}
 #writeup {
   width: 50%;
   height: 50%;
   position: fixed;
   top: 0;
   right: 0;
-  background-color: white;
-  color:black;
+  color:white;
   overflow-y: auto;
+  font: Arial, Helvetica, sans-serif;
 }
 
 .info {
