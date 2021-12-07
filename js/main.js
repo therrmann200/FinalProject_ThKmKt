@@ -343,7 +343,7 @@ function createLegend(attributes) {
         onAdd: function () {
             // create the control container with a particular class name
             var div2 = L.DomUtil.create('div', 'info legend'),
-                grades = [0, .0844, .1687, .2532, .3376, .4283, .5063],
+                grades = [0, .0844, .1689, .2532, .3376, .4283, .5063],
                 labels = [];
             $(div2).append('<h7 class= "temporalLegend">Average NDVI in <span class="year">2000</span></h7>' + '<br />')
             // loop through our density intervals and generate a label with a colored square for each interval
