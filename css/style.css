@@ -20,7 +20,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  background-image: url(img/trees.jpeg);
+  background-image: url(/img/trees.jpeg);
   background-position: center;
   background-size: 100%;
   background-repeat: no-repeat;
