@@ -344,48 +344,7 @@ function Data(map) {
         createPropSymbols(response, attributes);
         createSequenceControls(attributes);
         createLegend(attributes);
-        //create a Leaflet GeoJSON layer and add it to the map
-        /*L.geoJson(response, {
-            onEachFeature: onEachFeature,
-            style: style,
-            pointToLayer: function (feature, latlng) {
-                var attribute = attributes[0];
-
-                //create marker options
-                var options = {
-                    fillColor: getColor(Number(feature.properties[attribute])),
-                    weight: 1,
-                    opacity: 1,
-                    fillOpacity: 0.8
-                };
-
-                //For each feature, determine its value for the selected attribute
-                var attValue = Number(feature.properties[attribute]);
-
-
-                //Give each feature's circle marker a radius based on its attribute value
-                options.fillColor = getColor(feature.properties.attValue);
-
-                //create circle marker layer
-                var layer = L.circleMarker(latlng, options);
-
-                /*build popup content string
-                var popupContent = new PopupContent(feature.properties, attribute);
-
-                var popupContent2 = Object.create(popupContent);
-
-                popupContent2.formatted = "<h2>" + popupContent.population + " million</h2>";
-
-                layer.bindPopup(popupContent2.formatted, {
-                    offset: new L.Point(0, -options.radius)
-                });
-                console.log(popupContent.formatted);
-                /
-
-                //return the circle marker to the L.geoJson pointToLayer option
-                return layer;
-            }
-        }).addTo(map).bringToFront();*/
+        
     });
 };
 
