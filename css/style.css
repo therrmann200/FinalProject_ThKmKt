@@ -20,7 +20,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  background-image: url(../img/fire.jpg);
+  background-image: url(/img/trees.jpeg);
   background-position: center;
   background-size: 100%;
   background-repeat: no-repeat;
@@ -28,6 +28,7 @@
   -webkit-filter: blur(2px);
   color:white;
   overflow-y: auto;
+  opacity: .5;
 }
 #writeup {
   width: 50%;
