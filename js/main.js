@@ -4,7 +4,7 @@
 var dataStats = {};
 var geojson;
 var info = L.control();
-var map = L.map('map').setView([39.07269613220839, -105.375888968249], 7);
+var map = L.map('map',{keyboard:false}).setView([39.07269613220839, -105.375888968249], 7);
 //let map = L.map('map');
 function createMap() {
 
@@ -315,8 +315,24 @@ function createSequenceControls(attributes) {
 
         updatePropSymbols(attributes[index]);
     });
+    
 };
 
+function forward(attributes){
+    var index = $('.range-slider').val();
+    index++;
+    index = index > 20 ? 0 : index;
+    $('.range-slider').val(index);
+    console.log(attributes[index])
+    updatePropSymbols(attributes[index]);
+}
+function reverse(attributes){
+    var index = $('.range-slider').val();
+    index--;
+    index = index < 0 ? 20 : index;
+    $('.range-slider').val(index);
+    updatePropSymbols(attributes[index]);
+}
 
 function createLegend(attributes) {
     var LegendControl = L.Control.extend({
@@ -327,14 +343,14 @@ function createLegend(attributes) {
         onAdd: function () {
             // create the control container with a particular class name
             var div2 = L.DomUtil.create('div', 'info legend'),
-                grades = [0, .0844, .1688, .2532, .3376, .4283, .5063],
+                grades = [0, .0844, .1687, .2532, .3376, .4283, .5063],
                 labels = [];
             $(div2).append('<h7 class= "temporalLegend">Average NDVI in <span class="year">2000</span></h7>' + '<br />')
             // loop through our density intervals and generate a label with a colored square for each interval
             for (var i = 0; i < grades.length; i++) {
                 $(div2).append(
                     '<i style="background:' + getColor(grades[i] * 10000) + '"></i> ' +
-                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'));
+                    (grades[i] + (grades[i + 1] ? '&ndash;' + (grades[i + 1]-.0001) + '<br>' : '+')));
             }
 
             return div2;
@@ -354,7 +370,8 @@ function Data(map) {
         createPropSymbols(response, attributes);
         createSequenceControls(attributes);
         createLegend(attributes);
-        
+        arrowkey1(attributes);
+        arrowkey2(attributes);
     });
 };
 
@@ -376,3 +393,20 @@ $(document).ready(createMap());
     return control;
 }())
     .addTo(map);
+
+
+function arrowkey1(attributes){
+        $(document).bind("keydown", function(e){ 
+            e = e || window.event;
+            var charCode = e.which || e.keyCode;
+            if(charCode == 39) forward(attributes);
+        });
+    };
+    
+function arrowkey2(attributes){
+    $(document).bind("keydown", function(e){ 
+        e = e || window.event;
+        var charCode = e.which || e.keyCode;
+        if(charCode == 37) reverse(attributes);
+    });
+};
