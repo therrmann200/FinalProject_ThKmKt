@@ -39,7 +39,7 @@ var svg = d3.select("#graph")
 
 
 //Read the data
-d3.csv("../data/ndvi_reformat1.csv", function(data) {
+d3.csv("../data/ndvi_final.csv", function(data) {
 
   // group the data: I want to draw one line per group
   var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
