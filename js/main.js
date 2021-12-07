@@ -66,14 +66,7 @@ function processData(data) {
     return attributes;
 };
 
-//Example 1.2 line 1...PopupContent constructor function
-function PopupContent(properties, attribute) {
-    this.properties = properties;
-    this.attribute = attribute;
-    this.year = attribute.split("_")[1];
-    this.ndvi = this.properties[attribute];
-    this.formatted = "</p><p><b>NDVI in " + this.year + ":</b> " + this.ndvi + "</p>";
-};
+
 
 
 //Add circle markers for point features to the map
@@ -169,6 +162,22 @@ function triggerMapHighlight(fire) {
         }
     }
 }
+function triggerMapZoom(fire) {
+    //console.log("triggerMapHighlight function starts")
+    var layers = geojson.getLayers();
+    //iterate through getLayers
+    for (var i = 0; i < layers.length; i++) {
+        //only if the state name is the same as the one passed to the function, change style
+        //console.log(layers[i].feature.properties.FID_1);
+        if (layers[i].feature.properties.FID_1 == fire) {
+            console.log("true");
+            var layer = layers[i];
+            map.fitBounds(layer.getBounds());
+            };
+            
+      
+        }
+    }
 
 function triggerMapReset(fire) {
     //an array holding all the "layers" of the geojson "layergroup"
@@ -199,6 +208,7 @@ function resetHighlight(e) {
 function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
     var layer = e.target;
+    layer.bindPopup("NDVI: " + Math.round(layer.feature.properties.ndvi_2000)/ 10000);
     //triggerLineHighlight(layer.feature.properties.FID_1);
 }
 

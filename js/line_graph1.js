@@ -141,5 +141,8 @@ svg.append("text")
        // .attr("stroke-opacity", 0.4)
        triggerMapReset(d.key);
      })
+     .on("click", function(d){
+       triggerMapZoom(d.key)
+     })
 
 })
