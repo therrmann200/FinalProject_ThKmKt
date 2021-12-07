@@ -26,7 +26,16 @@
 
     <div id="graph"></div>
     <div id="writeup">
-        hello
+      <h1> Vegetation Regeneration After Wildfires Using NDVI</h1>
+<p>
+This displays wildfire occurrences in Colorado from 2000 to 2019 as polygons encoded by color with associated NDVI values. NDVI, or normalized difference vegetation index, is the difference between visible and near-infrared reflectance of vegetation cover and can be used to estimate the health of vegetation on an area of land. This data is displayed because it allows for visualization of when wildfires occur and how quickly the forest recovers.
+<br/><br/>
+Hovering over fire polygons displays the name, year, and size of the fire in the pop-up in the upper right corner of the map. You can click on a wildfire polygon to zoom in to it and the NDVI values will show in the pop up for the selected year you can change by clicking through years using the slider in the bottom left. To return to full extent after zooming to the selected fire, click on the ‘Reset Zoom’ button below the fire information box.
+<br/><br/>
+The graph below displays NDVI values over the years with each line being a different wildfire occurrence. When you hover over the graph it highlights the fire area and when you hover over the fire area it highlights the line
+<br/><br/>
+This app was developed for GEOG-4043/5043 Advanced Geovisualization and Web Mapping taught by Professor Karimzadaeh at CU Boulder Fall 2021. This app was created by Kyla Christopher-Moody, Thomas Herrmann, and Katie Tyler. This app uses leaflet, jquery, and d3 plugins.
+</p>
     </div>
 
     <script src="lib/d3.min.js"></script>
