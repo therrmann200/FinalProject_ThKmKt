@@ -3,7 +3,11 @@
 function triggerLineHighlight(fireID) {
   document.getElementById(fireID).classList.remove('line');
   document.getElementById(fireID).classList.add('lineHover');
-  console.log('fire  id: ' + fireID);
+  // if (lastFire !== null) {
+  //   document.getElementById(lastFire).classList.remove('lineHover');
+  //   document.getElementById(lastFire).classList.add('line');
+  // };
+  // var lastFire = fireID;
 }
 
 function triggerLineReset(fireID) {
@@ -120,17 +124,21 @@ svg.append("text")
     .on("mouseover", function (d) {
        console.log("Mouse is on " + d.key);
        triggerMapHighlight(d.key);
-       d3.select(this).style("stroke","green")
-       .attr("stroke-width", 2.5)
-       .attr("stroke-opacity", 1);
+       // d3.select(this).style("stroke","green")
+       // .attr("stroke-width", 2.5)
+       // .attr("stroke-opacity", 1);
+       document.getElementById(d.key).classList.remove('line');
+       document.getElementById(d.key).classList.add('lineHover');
      })
      .on("mouseout", function (d) {
        console.log("Mouse moved out of " + d.key);
-       d3.select(this).style("stroke", function(d) {
-         return color(d.key)
-       })
-       .attr("stroke-width", 1.5)
-       .attr("stroke-opacity", 0.4)
+       document.getElementById(d.key).classList.remove('lineHover');
+       document.getElementById(d.key).classList.add('line');
+       // d3.select(this).style("stroke", function(d) {
+       //   return color(d.key)
+       // })
+       // .attr("stroke-width", 1.5)
+       // .attr("stroke-opacity", 0.4)
        triggerMapReset(d.key);
      })
 

@@ -198,13 +198,15 @@ function resetHighlight(e) {
 
 function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
+    var layer = e.target;
+    //triggerLineHighlight(layer.feature.properties.FID_1);
 }
 
 function onEachFeature(feature, layer, attribute) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeature
+        click: zoomToFeature,
     });
 
 
