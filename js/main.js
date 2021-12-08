@@ -174,8 +174,8 @@ function triggerMapZoom(fire) {
             var layer = layers[i];
             map.fitBounds(layer.getBounds());
             };
-            
-      
+
+
         }
     }
 
@@ -238,7 +238,7 @@ function updatePropSymbols(attribute) {
                 dashArray: '',
                 fillOpacity: 0.4
             })
-            layer.bindPopup("NDVI: " + Math.round(layer.feature.properties[attribute])/ 10000);
+            layer.bindPopup("Selected Year NDVI: " + Math.round(layer.feature.properties[attribute])/ 10000);
         }
 
     });
@@ -315,7 +315,7 @@ function createSequenceControls(attributes) {
 
         updatePropSymbols(attributes[index]);
     });
-    
+
 };
 
 function forward(attributes){
@@ -396,15 +396,15 @@ $(document).ready(createMap());
 
 
 function arrowkey1(attributes){
-        $(document).bind("keydown", function(e){ 
+        $(document).bind("keydown", function(e){
             e = e || window.event;
             var charCode = e.which || e.keyCode;
             if(charCode == 39) forward(attributes);
         });
     };
-    
+
 function arrowkey2(attributes){
-    $(document).bind("keydown", function(e){ 
+    $(document).bind("keydown", function(e){
         e = e || window.event;
         var charCode = e.which || e.keyCode;
         if(charCode == 37) reverse(attributes);
