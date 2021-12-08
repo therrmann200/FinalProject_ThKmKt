@@ -208,7 +208,7 @@ function resetHighlight(e) {
 function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
     var layer = e.target;
-    layer.bindPopup("NDVI: " + Math.round(layer.feature.properties.ndvi_2000)/ 10000);
+    layer.bindPopup("Selected Year NDVI: " + Math.round(layer.feature.properties.ndvi_2000)/ 10000);
     //triggerLineHighlight(layer.feature.properties.FID_1);
 }
 
@@ -345,12 +345,12 @@ function createLegend(attributes) {
             var div2 = L.DomUtil.create('div', 'info legend'),
                 grades = [0, .0844, .1689, .2532, .3376, .4283, .5063],
                 labels = [];
-            $(div2).append('<h7 class= "temporalLegend">Average NDVI in <span class="year">2000</span></h7>' + '<br />')
+            $(div2).append('<h7 class= "temporalLegend"><center>Average NDVI in </br><b><span class="year">2000</span></b></center></h7>')
             // loop through our density intervals and generate a label with a colored square for each interval
             for (var i = 0; i < grades.length; i++) {
                 $(div2).append(
                     '<i style="background:' + getColor(grades[i] * 10000) + '"></i> ' +
-                    (grades[i] + (grades[i + 1] ? '&ndash;' + (grades[i + 1]-.0001) + '<br>' : '+')));
+                    (Math.round(grades[i]*100)/100 + (grades[i + 1] ? '&ndash;' + Math.round((grades[i + 1]-.0001)*100)/100 + '<br>' : '+')));
             }
 
             return div2;
