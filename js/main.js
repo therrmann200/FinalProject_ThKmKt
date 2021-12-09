@@ -4,16 +4,33 @@
 var dataStats = {};
 var geojson;
 var info = L.control();
-var map = L.map('map',{keyboard:false}).setView([39.07269613220839, -105.375888968249], 7);
+
+//define two different basemap variables
+var openStreetMap = L.tileLayer('https://api.mapbox.com/styles/v1/therrmann/ckwpbw6m212h514p4x02rfbn5/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidGhlcnJtYW5uIiwiYSI6ImNrdGFuMHltYjFvM2oydW8wOGExaGJjZXUifQ.uQ3ywlhCjj5tRLf5Y3lcGQ', {
+    attribution: '&copy; <a href=”https://www.mapbox.com/about/maps/”>Mapbox</a> &copy; <a href=”http://www.openstreetmap.org/copyright”>OpenStreetMap</a>'
+
+});
+
+var satelliteMap = L.tileLayer('https://api.mapbox.com/styles/v1/ktyler828/ckwxr646c1a9i14sf1nte6pjr/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoia3R5bGVyODI4IiwiYSI6ImNrdGFuazF1dzFudXoybm8weHlwZWtwNWwifQ.58u-6lfQ9ssj0It-Qgc3Fw', {
+    attribution: '&copy; <a href=”https://www.mapbox.com/about/maps/”>Mapbox</a> &copy; <a href=”http://www.openstreetmap.org/copyright”>OpenStreetMap</a> &copy; <a href=”https://www.maxar.com/”>Maxar</a>'
+});
+
+
+var map = L.map('map', {
+  keyboard:false,
+  center: [39.07269613220839, -105.375888968249],
+  zoom: 7,
+  layers: [openStreetMap]});
+  //.setView([39.07269613220839, -105.375888968249], 7);
 //let map = L.map('map');
+
+//set of our basemaps
+var baseMaps = {
+    "Grayscale": openStreetMap,
+    "Satellite": satelliteMap
+};
+
 function createMap() {
-
-    var openStreetMap = L.tileLayer('https://api.mapbox.com/styles/v1/therrmann/ckwpbw6m212h514p4x02rfbn5/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidGhlcnJtYW5uIiwiYSI6ImNrdGFuMHltYjFvM2oydW8wOGExaGJjZXUifQ.uQ3ywlhCjj5tRLf5Y3lcGQ', {
-        attribution: '&copy; <a href=”https://www.mapbox.com/about/maps/”>Mapbox</a> &copy; <a href=”http://www.openstreetmap.org/copyright”>OpenStreetMap</a>'
-
-    })
-
-    openStreetMap.addTo(map);
 
     //call getData function
     Data(map);
@@ -174,8 +191,8 @@ function triggerMapZoom(fire) {
             var layer = layers[i];
             map.fitBounds(layer.getBounds());
             };
-            
-      
+
+
         }
     }
 
@@ -238,7 +255,7 @@ function updatePropSymbols(attribute) {
                 dashArray: '',
                 fillOpacity: 0.4
             })
-            layer.bindPopup("NDVI: " + Math.round(layer.feature.properties[attribute])/ 10000);
+            layer.bindPopup("Selected Year NDVI: " + Math.round(layer.feature.properties[attribute])/ 10000);
         }
 
     });
@@ -315,7 +332,7 @@ function createSequenceControls(attributes) {
 
         updatePropSymbols(attributes[index]);
     });
-    
+
 };
 
 function forward(attributes){
@@ -396,17 +413,20 @@ $(document).ready(createMap());
 
 
 function arrowkey1(attributes){
-        $(document).bind("keydown", function(e){ 
+        $(document).bind("keydown", function(e){
             e = e || window.event;
             var charCode = e.which || e.keyCode;
             if(charCode == 39) forward(attributes);
         });
     };
-    
+
 function arrowkey2(attributes){
-    $(document).bind("keydown", function(e){ 
+    $(document).bind("keydown", function(e){
         e = e || window.event;
         var charCode = e.which || e.keyCode;
         if(charCode == 37) reverse(attributes);
     });
 };
+
+//add layers control to toggle beween baseMaps
+L.control.layers(baseMaps).addTo(map);
