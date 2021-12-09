@@ -112,3 +112,11 @@ h1 {
   margin-right: 100px;
   margin-left: 80px;
 }
+
+a:link {
+  color: lightblue;
+}
+
+a:visited {
+  color: lightblue;
+}
